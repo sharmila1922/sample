@@ -8,6 +8,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Update apt-get and install aidl
+        run: |
+          apt-get update
+          apt-get install -y aidl
+          
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
       - uses: actions/checkout@v2
 
       # used to cache dependencies with a timeout
