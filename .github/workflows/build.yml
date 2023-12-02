@@ -28,6 +28,13 @@ jobs:
           path: .buildozer
           key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
 
+      - name: Debug Info
+        run: |
+          echo "Current Directory: $(pwd)"
+          echo "Contents of buildozer.spec:"
+          cat buildozer.spec
+        shell: bash
+      
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
