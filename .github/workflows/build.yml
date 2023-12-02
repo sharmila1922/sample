@@ -1,21 +1,28 @@
 name: CI
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Update apt-get and install aidl
-        run: |
-          apt-get update
-          sudo apt-get install -y aidl  # Use 'sudo' to execute commands with elevated privileges
-          
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Docker
+        uses: docker/setup-docker@v2
+        with:
+          container-name: ubuntu-container
+          publish: 8080:80
+
+      - name: Update apt-get and install aidl
+        run: |
+          docker exec -it ubuntu-container apt-get update
+          docker exec -it ubuntu-container apt-get install -y aidl
+          
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -25,10 +32,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --upgrade buildozer
-        
-      - uses: actions/checkout@v2
 
-      # used to cache dependencies with a timeout
       - name: Get Date
         id: get-date
         run: |
